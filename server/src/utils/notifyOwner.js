@@ -66,3 +66,15 @@ export const notifyPasswordChange = (user) =>
       `Time: ${new Date().toISOString()}`,
     ].join('\n'),
   });
+
+export const notifyLogin = (user) =>
+  notifyOwner({
+    subject: 'LiveCodeHub — User logged in',
+    text: [
+      'A user logged in to LiveCodeHub.',
+      '',
+      `Name: ${user.name}`,
+      `Email: ${user.email}`,
+      `Time: ${new Date().toISOString()}`,
+    ].join('\n'),
+  });

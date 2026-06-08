@@ -4,7 +4,7 @@ import RoomVisit from '../models/RoomVisit.js';
 import Message from '../models/Message.js';
 import { generateToken } from '../config/jwt.js';
 import { AppError, asyncHandler } from '../utils/AppError.js';
-import { notifySignup, notifyPasswordChange } from '../utils/notifyOwner.js';
+import { notifySignup, notifyLogin, notifyPasswordChange } from '../utils/notifyOwner.js';
 
 export const signup = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -51,6 +51,8 @@ export const login = asyncHandler(async (req, res) => {
   }
 
   const token = generateToken(user._id);
+
+  notifyLogin(user);
 
   res.json({
     success: true,
