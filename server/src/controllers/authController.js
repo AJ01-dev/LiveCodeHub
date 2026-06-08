@@ -4,6 +4,7 @@ import RoomVisit from '../models/RoomVisit.js';
 import Message from '../models/Message.js';
 import { generateToken } from '../config/jwt.js';
 import { AppError, asyncHandler } from '../utils/AppError.js';
+import { notifySignup, notifyPasswordChange } from '../utils/notifyOwner.js';
 
 export const signup = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
@@ -19,6 +20,8 @@ export const signup = asyncHandler(async (req, res) => {
 
   const user = await User.create({ name, email, password });
   const token = generateToken(user._id);
+
+  notifySignup(user);
 
   res.status(201).json({
     success: true,
@@ -147,6 +150,8 @@ export const changePassword = asyncHandler(async (req, res) => {
 
   user.password = newPassword;
   await user.save();
+
+  notifyPasswordChange(user);
 
   res.json({
     success: true,
