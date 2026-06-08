@@ -1,8 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import { createServer } from 'http';
-import connectDB from './config/db.js';
+import { connectDBWithRetry } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import roomRoutes from './routes/roomRoutes.js';
 import executionRoutes from './routes/executionRoutes.js';
@@ -26,7 +27,15 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'CodeCollab API is running' });
+  const dbState = ['disconnected', 'connected', 'connecting', 'disconnecting'][
+    mongoose.connection.readyState
+  ];
+
+  res.json({
+    success: true,
+    message: 'CodeCollab API is running',
+    db: dbState,
+  });
 });
 
 app.use('/api/auth', authRoutes);
@@ -36,13 +45,23 @@ app.use('/api/execute', executionRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-connectDB().then(() => {
-  initializeSocket(httpServer);
-
+const start = () => {
   httpServer.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   });
-});
+
+  connectDBWithRetry()
+    .then(() => {
+      initializeSocket(httpServer);
+      console.log('Socket.io initialized');
+    })
+    .catch((error) => {
+      console.error(`Fatal: MongoDB unavailable — ${error.message}`);
+      console.error('Verify MONGODB_URI in Render Environment and Atlas IP access (0.0.0.0/0)');
+    });
+};
+
+start();
 
 export default app;

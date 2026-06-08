@@ -1,0 +1,12 @@
+# Render → livecodehub-1 (Backend) → Environment
+# DELETE these if present: USE_MEMORY_DB, PORT, JUDGE0_API_KEY, JUDGE0_API_HOST
+# Replace YOUR_MONGODB_PASSWORD and cluster0.xxxxx with Atlas values
+
+MONGODB_URI=mongodb+srv://livecodehub:YOUR_MONGODB_PASSWORD@cluster0.xxxxx.mongodb.net/codecollab?retryWrites=true&w=majority
+JWT_SECRET=e290ded775d45d0756c73b5db29d2c281e25fa0b0353b2eba3e66114b2611a68
+JWT_EXPIRES_IN=7d
+NODE_ENV=production
+CLIENT_URL=https://live-code-hub-chi.vercel.app
+JUDGE0_API_URL=https://ce.judge0.com
+JUDGE0_API_KEY=
+JUDGE0_API_HOST=
