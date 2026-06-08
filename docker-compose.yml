@@ -1,0 +1,14 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: codecollab-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - codecollab_mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: codecollab
+
+volumes:
+  codecollab_mongo_data:
