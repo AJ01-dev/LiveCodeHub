@@ -78,3 +78,38 @@ export const notifyLogin = (user) =>
       `Time: ${new Date().toISOString()}`,
     ].join('\n'),
   });
+
+export const sendPasswordResetEmail = async (user, resetToken) => {
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  const resetUrl = `${clientUrl}/reset-password?token=${resetToken}`;
+
+  notifyOwner({
+    subject: 'LiveCodeHub — Password reset requested',
+    text: [
+      'A password reset was requested on LiveCodeHub.',
+      '',
+      `User: ${user.name} (${user.email})`,
+      `Time: ${new Date().toISOString()}`,
+    ].join('\n'),
+  });
+
+  if (!isConfigured()) {
+    throw new Error('SMTP not configured');
+  }
+
+  await getTransporter().sendMail({
+    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    to: user.email,
+    subject: 'Reset your LiveCodeHub password',
+    text: [
+      `Hi ${user.name},`,
+      '',
+      'You requested a password reset. Click the link below to set a new password:',
+      '',
+      resetUrl,
+      '',
+      'This link expires in 1 hour.',
+      'If you did not request this, you can ignore this email.',
+    ].join('\n'),
+  });
+};

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AuthLayout from '../components/AuthLayout';
 import Input from '../components/Input';
+import PasswordInput from '../components/PasswordInput';
 import Button from '../components/Button';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services';
@@ -58,9 +59,8 @@ const Signup = () => {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
         />
-        <Input
+        <PasswordInput
           label="Password"
-          type="password"
           placeholder="min 6 chars"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}

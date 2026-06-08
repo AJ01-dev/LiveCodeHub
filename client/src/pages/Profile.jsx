@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import Navbar from '../components/Navbar';
 import Button from '../components/Button';
 import Input from '../components/Input';
+import PasswordInput from '../components/PasswordInput';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services';
 
@@ -125,23 +126,20 @@ const Profile = () => {
         <div className="gh-card p-4">
           <h2 className="section-label normal-case text-sm">Password</h2>
           <form onSubmit={handleChangePassword} className="space-y-3">
-            <Input
+            <PasswordInput
               label="Current"
-              type="password"
               value={passwordForm.currentPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
               required
             />
-            <Input
+            <PasswordInput
               label="New"
-              type="password"
               value={passwordForm.newPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
               required
             />
-            <Input
+            <PasswordInput
               label="Confirm"
-              type="password"
               value={passwordForm.confirmPassword}
               onChange={(e) => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
               required

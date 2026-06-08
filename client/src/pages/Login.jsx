@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AuthLayout from '../components/AuthLayout';
 import Input from '../components/Input';
+import PasswordInput from '../components/PasswordInput';
 import Button from '../components/Button';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services';
@@ -43,14 +45,20 @@ const Login = () => {
           onChange={(e) => setForm({ ...form, email: e.target.value })}
           required
         />
-        <Input
-          label="Password"
-          type="password"
-          placeholder="••••••••"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
-          required
-        />
+        <div className="space-y-2">
+          <PasswordInput
+            label="Password"
+            placeholder="••••••••"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+          />
+          <div className="flex justify-end">
+            <Link to="/forgot-password" className="text-2xs text-gh-muted hover:text-gh-accent">
+              Forgot password?
+            </Link>
+          </div>
+        </div>
         <div className="pt-2">
           <Button type="submit" loading={loading} className="w-full">
             Sign in
